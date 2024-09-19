@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Annual CO2 Emissions in 2022",
+  "title": "Per Capita CO2 Emissions (2022)",
   "width": 800,
   "height": 400,
   "projection": {
@@ -37,7 +37,7 @@
     },
     {
       "data": {
-        "url": "ne_110m_admin_0_countries.topojson",
+        "url": "https://vega.github.io/vega-datasets/data/ne_110m_admin_0_countries.topojson",
         "format": {
           "type": "topojson",
           "feature": "ne_110m_admin_0_countries"
@@ -45,18 +45,17 @@
       },
       "transform": [
         {
-          "lookup": "properties.NAME_EN",
+          "lookup": "properties.NAME",
           "from": {
             "data": {
-              "url": "data/Annual CO2 emissions.csv"
+              "url": "data/Per capita CO2 emissions, 2022.csv"
             },
             "key": "Entity",
-            "fields": ["Annual emissions", "Year"]
+            "fields": ["Emission", "Year"]
           }
         },
-        { 
-          
-          "calculate": "datum['Annual emissions']",
+        {
+          "calculate": "datum['Emission'] + 0.1",
           "as": "Adjusted Emissions"
         }
       ],
@@ -68,9 +67,9 @@
           "field": "Adjusted Emissions",
           "type": "quantitative",
           "scale": {
-            "type": "log",
-            "domain": [1000, 10000000000],
-            "scheme": "reds" 
+            "type": "linear",
+            "domain": [0, 30],
+            "scheme": "reds"
           }
         },
         "tooltip": [
@@ -82,8 +81,8 @@
           {
             "field": "Adjusted Emissions",
             "type": "quantitative",
-            "title": "CO2 Emissions",
-            "format": ".2s"
+            "title": "CO2 Emissions (per capita)",
+            "format": ".2f"
           }
         ]
       }
